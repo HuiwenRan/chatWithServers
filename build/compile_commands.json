@@ -1,0 +1,26 @@
+[
+{
+  "directory": "/root/chat/build/src/server",
+  "command": "/usr/bin/g++  -I/root/chat/include -I/root/chat/include/server -I/root/chat/include/server/db -I/root/chat/thirdparty -g -g -o CMakeFiles/server.dir/chatservice.cpp.o -c /root/chat/src/server/chatservice.cpp",
+  "file": "/root/chat/src/server/chatservice.cpp",
+  "output": "src/server/CMakeFiles/server.dir/chatservice.cpp.o"
+},
+{
+  "directory": "/root/chat/build/src/server",
+  "command": "/usr/bin/g++  -I/root/chat/include -I/root/chat/include/server -I/root/chat/include/server/db -I/root/chat/thirdparty -g -g -o CMakeFiles/server.dir/main.cpp.o -c /root/chat/src/server/main.cpp",
+  "file": "/root/chat/src/server/main.cpp",
+  "output": "src/server/CMakeFiles/server.dir/main.cpp.o"
+},
+{
+  "directory": "/root/chat/build/src/server",
+  "command": "/usr/bin/g++  -I/root/chat/include -I/root/chat/include/server -I/root/chat/include/server/db -I/root/chat/thirdparty -g -g -o CMakeFiles/server.dir/usermodel.cpp.o -c /root/chat/src/server/usermodel.cpp",
+  "file": "/root/chat/src/server/usermodel.cpp",
+  "output": "src/server/CMakeFiles/server.dir/usermodel.cpp.o"
+},
+{
+  "directory": "/root/chat/build/src/server",
+  "command": "/usr/bin/g++  -I/root/chat/include -I/root/chat/include/server -I/root/chat/include/server/db -I/root/chat/thirdparty -g -g -o CMakeFiles/server.dir/db/db.cpp.o -c /root/chat/src/server/db/db.cpp",
+  "file": "/root/chat/src/server/db/db.cpp",
+  "output": "src/server/CMakeFiles/server.dir/db/db.cpp.o"
+}
+]

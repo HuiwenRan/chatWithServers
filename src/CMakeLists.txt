@@ -1,1 +1,1 @@
-add_subdirectory(${PROJECT_SOURCE_DIR}/server)
+add_subdirectory(${PROJECT_SOURCE_DIR}/src/server)
