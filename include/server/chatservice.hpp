@@ -4,6 +4,7 @@
 #include <muduo/net/TcpConnection.h>
 #include <muduo/net/EventLoop.h>
 #include <functional>
+#include <mutex>
 
 #include "json.hpp"
 #include "public.hpp"
@@ -23,6 +24,8 @@ public:
     static ChatService &getInstance();
 
     logicFunc getHandler(EnMsgType msgid);
+    void clientCloseExcception(const muduo::net::TcpConnectionPtr &conn);
+    void reset();
 
 private:
     ChatService();
@@ -39,10 +42,11 @@ private:
     void loginLogic(const muduo::net::TcpConnectionPtr &conn,
                     json &msg,
                     muduo::Timestamp);
-
     std::unordered_map<EnMsgType, logicFunc> handlerMap_;
 
 private:
+    std::unordered_map<int, muduo::net::TcpConnectionPtr> connMap_;
+    std::mutex connMapmtx_;
     UserModel userModel_;
 };
 

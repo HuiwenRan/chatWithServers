@@ -47,6 +47,8 @@ void ChatServer::connectionCallback(const muduo::net::TcpConnectionPtr &conn)
 {
     if (!conn->connected())
     {
+        std::cout << "客户端断开连接" << std::endl;
+        ChatService::getInstance().clientCloseExcception(conn);
         conn->shutdown();
     }
 }

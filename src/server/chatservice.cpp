@@ -7,6 +7,11 @@ ChatService &ChatService::getInstance()
     return instance;
 }
 
+void ChatService::reset()
+{
+    userModel_.resetState();
+}
+
 logicFunc ChatService::getHandler(EnMsgType msgid)
 {
     // 记录错误日志
@@ -92,8 +97,12 @@ void ChatService::loginLogic(const muduo::net::TcpConnectionPtr &conn,
         }
         else
         {
+            {
+                std::lock_guard<std::mutex> lock(connMapmtx_);
+                connMap_.insert(std::make_pair(id, conn));
+            }
             user.set_state("online");
-            userModel_.updateUser(user);
+            userModel_.updateState(user);
             json res;
             res["msgid"] = static_cast<int>(EnMsgType::LOGIN_MSG);
             res["errno"] = 0;
@@ -108,4 +117,26 @@ void ChatService::loginLogic(const muduo::net::TcpConnectionPtr &conn,
         res["info"] = "密码错误";
         conn->send(res.dump());
     }
+}
+
+//  处理用户异常退出
+void ChatService::clientCloseExcception(const muduo::net::TcpConnectionPtr &conn)
+{
+    User user;
+    {
+        std::lock_guard<std::mutex> lock(connMapmtx_);
+        for (auto it = connMap_.begin(); it != connMap_.end(); ++it)
+        {
+            if (it->second == conn)
+            {
+                user.set_id(it->first);
+
+                connMap_.erase(it);
+                break;
+            }
+        }
+    }
+    std::cout << "用户" << user.get_id() << "退出聊天室" << std::endl;
+    user.set_state("offline");
+    userModel_.updateState(user);
 }

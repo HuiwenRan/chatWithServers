@@ -43,10 +43,10 @@ bool UserModel::deleteUser(User &user)
 {
     return true;
 }
-bool UserModel::updateUser(User &user)
+bool UserModel::updateState(User &user)
 {
     char sql[1024] = {0};
-    sprintf(sql, "update user set name = '%s', password = '%s',state = '%s' where id = %d", user.get_name().c_str(), user.get_password().c_str(), user.get_state().c_str(), user.get_id());
+    sprintf(sql, "update user set state = '%s' where id = %d", user.get_state().c_str(), user.get_id());
 
     MySQL mysql;
     if (mysql.connect())
@@ -57,4 +57,15 @@ bool UserModel::updateUser(User &user)
         }
     }
     return false;
+}
+
+void UserModel::resetState()
+{
+    char sql[1024] = {0};
+    sprintf(sql, "update user set state = 'offline' where state = 'online'");
+    MySQL mysql;
+    if (mysql.connect())
+    {
+        mysql.update(sql);
+    }
 }
