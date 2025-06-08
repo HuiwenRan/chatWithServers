@@ -5,4 +5,5 @@ enum class EnMsgType
 {
     REG_MSG = 1,
     LOGIN_MSG,
+    CHAT_MSG,
 };

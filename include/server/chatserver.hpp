@@ -61,6 +61,7 @@ void ChatServer::messageCallback(const muduo::net::TcpConnectionPtr &conn,
 
     try
     {
+        std::cout << buf << std::endl;
         // 尝试解析JSON，可能抛出异常
         json j = json::parse(buf);
 

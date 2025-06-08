@@ -42,6 +42,13 @@ ChatService::ChatService()
                                   std::placeholders::_1,
                                   std::placeholders::_2,
                                   std::placeholders::_3));
+
+    handlerMap_.emplace(EnMsgType::CHAT_MSG,
+                        std::bind(&ChatService::sendMessage,
+                                  this,
+                                  std::placeholders::_1,
+                                  std::placeholders::_2,
+                                  std::placeholders::_3));
 }
 
 // 处理注册操作
@@ -106,6 +113,9 @@ void ChatService::loginLogic(const muduo::net::TcpConnectionPtr &conn,
             json res;
             res["msgid"] = static_cast<int>(EnMsgType::LOGIN_MSG);
             res["errno"] = 0;
+            res["offlineMsg"] = offlineMsgModel_.query(id);
+            res["info"] = "登录成功";
+            offlineMsgModel_.remove(id);
             conn->send(res.dump());
         }
     }
@@ -117,6 +127,29 @@ void ChatService::loginLogic(const muduo::net::TcpConnectionPtr &conn,
         res["info"] = "密码错误";
         conn->send(res.dump());
     }
+}
+
+// 处理用户放松消息逻辑
+void ChatService::sendMessage(const muduo::net::TcpConnectionPtr &conn,
+                              json &msg,
+                              muduo::Timestamp)
+{
+    int toid = msg["to"].get<int>();
+    std::string content = msg["msg"].get<std::string>();
+    {
+        // 在使用conn时需要加锁
+        std::lock_guard<std::mutex> lock(connMapmtx_);
+        auto it = connMap_.find(toid);
+        if (it != connMap_.end())
+        {
+            json res;
+            res["msgid"] = content;
+            it->second->send(res.dump());
+            return;
+        }
+    }
+    // 说明用户没在线，存入offlineMsg中
+    offlineMsgModel_.insert(toid, content);
 }
 
 //  处理用户异常退出

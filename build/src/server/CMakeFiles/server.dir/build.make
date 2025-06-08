@@ -97,10 +97,24 @@ src/server/CMakeFiles/server.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/server.dir/main.cpp.s"
 	cd /root/chat/build/src/server && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/chat/src/server/main.cpp -o CMakeFiles/server.dir/main.cpp.s
 
+src/server/CMakeFiles/server.dir/offlinemsgmodel.cpp.o: src/server/CMakeFiles/server.dir/flags.make
+src/server/CMakeFiles/server.dir/offlinemsgmodel.cpp.o: /root/chat/src/server/offlinemsgmodel.cpp
+src/server/CMakeFiles/server.dir/offlinemsgmodel.cpp.o: src/server/CMakeFiles/server.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/chat/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/server/CMakeFiles/server.dir/offlinemsgmodel.cpp.o"
+	cd /root/chat/build/src/server && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/server/CMakeFiles/server.dir/offlinemsgmodel.cpp.o -MF CMakeFiles/server.dir/offlinemsgmodel.cpp.o.d -o CMakeFiles/server.dir/offlinemsgmodel.cpp.o -c /root/chat/src/server/offlinemsgmodel.cpp
+
+src/server/CMakeFiles/server.dir/offlinemsgmodel.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/server.dir/offlinemsgmodel.cpp.i"
+	cd /root/chat/build/src/server && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/chat/src/server/offlinemsgmodel.cpp > CMakeFiles/server.dir/offlinemsgmodel.cpp.i
+
+src/server/CMakeFiles/server.dir/offlinemsgmodel.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/server.dir/offlinemsgmodel.cpp.s"
+	cd /root/chat/build/src/server && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/chat/src/server/offlinemsgmodel.cpp -o CMakeFiles/server.dir/offlinemsgmodel.cpp.s
+
 src/server/CMakeFiles/server.dir/usermodel.cpp.o: src/server/CMakeFiles/server.dir/flags.make
 src/server/CMakeFiles/server.dir/usermodel.cpp.o: /root/chat/src/server/usermodel.cpp
 src/server/CMakeFiles/server.dir/usermodel.cpp.o: src/server/CMakeFiles/server.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/chat/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/server/CMakeFiles/server.dir/usermodel.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/chat/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/server/CMakeFiles/server.dir/usermodel.cpp.o"
 	cd /root/chat/build/src/server && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/server/CMakeFiles/server.dir/usermodel.cpp.o -MF CMakeFiles/server.dir/usermodel.cpp.o.d -o CMakeFiles/server.dir/usermodel.cpp.o -c /root/chat/src/server/usermodel.cpp
 
 src/server/CMakeFiles/server.dir/usermodel.cpp.i: cmake_force
@@ -114,7 +128,7 @@ src/server/CMakeFiles/server.dir/usermodel.cpp.s: cmake_force
 src/server/CMakeFiles/server.dir/db/db.cpp.o: src/server/CMakeFiles/server.dir/flags.make
 src/server/CMakeFiles/server.dir/db/db.cpp.o: /root/chat/src/server/db/db.cpp
 src/server/CMakeFiles/server.dir/db/db.cpp.o: src/server/CMakeFiles/server.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/chat/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/server/CMakeFiles/server.dir/db/db.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/root/chat/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/server/CMakeFiles/server.dir/db/db.cpp.o"
 	cd /root/chat/build/src/server && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/server/CMakeFiles/server.dir/db/db.cpp.o -MF CMakeFiles/server.dir/db/db.cpp.o.d -o CMakeFiles/server.dir/db/db.cpp.o -c /root/chat/src/server/db/db.cpp
 
 src/server/CMakeFiles/server.dir/db/db.cpp.i: cmake_force
@@ -129,6 +143,7 @@ src/server/CMakeFiles/server.dir/db/db.cpp.s: cmake_force
 server_OBJECTS = \
 "CMakeFiles/server.dir/chatservice.cpp.o" \
 "CMakeFiles/server.dir/main.cpp.o" \
+"CMakeFiles/server.dir/offlinemsgmodel.cpp.o" \
 "CMakeFiles/server.dir/usermodel.cpp.o" \
 "CMakeFiles/server.dir/db/db.cpp.o"
 
@@ -137,11 +152,12 @@ server_EXTERNAL_OBJECTS =
 
 /root/chat/bin/server: src/server/CMakeFiles/server.dir/chatservice.cpp.o
 /root/chat/bin/server: src/server/CMakeFiles/server.dir/main.cpp.o
+/root/chat/bin/server: src/server/CMakeFiles/server.dir/offlinemsgmodel.cpp.o
 /root/chat/bin/server: src/server/CMakeFiles/server.dir/usermodel.cpp.o
 /root/chat/bin/server: src/server/CMakeFiles/server.dir/db/db.cpp.o
 /root/chat/bin/server: src/server/CMakeFiles/server.dir/build.make
 /root/chat/bin/server: src/server/CMakeFiles/server.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/root/chat/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable /root/chat/bin/server"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/root/chat/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable /root/chat/bin/server"
 	cd /root/chat/build/src/server && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/server.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
