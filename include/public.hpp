@@ -7,4 +7,7 @@ enum class EnMsgType
     LOGIN_MSG,
     CHAT_MSG,
     ADDFRIEND_MSG,
+    CREATEGROUP_MSG,
+    JOINGROUP_MSG,
+    CHATGOURP_MSG,
 };

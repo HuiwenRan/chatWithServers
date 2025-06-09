@@ -55,6 +55,24 @@ ChatService::ChatService()
                                   std::placeholders::_1,
                                   std::placeholders::_2,
                                   std::placeholders::_3));
+    handlerMap_.emplace(EnMsgType::CREATEGROUP_MSG,
+                        std::bind(&ChatService::createGroup,
+                                  this,
+                                  std::placeholders::_1,
+                                  std::placeholders::_2,
+                                  std::placeholders::_3));
+    handlerMap_.emplace(EnMsgType::JOINGROUP_MSG,
+                        std::bind(&ChatService::joinGroup,
+                                  this,
+                                  std::placeholders::_1,
+                                  std::placeholders::_2,
+                                  std::placeholders::_3));
+    handlerMap_.emplace(EnMsgType::CHATGOURP_MSG,
+                        std::bind(&ChatService::chatGroup,
+                                  this,
+                                  std::placeholders::_1,
+                                  std::placeholders::_2,
+                                  std::placeholders::_3));
 }
 
 // 处理注册操作
@@ -84,6 +102,15 @@ void ChatService::registerLogic(const muduo::net::TcpConnectionPtr &conn,
         res["errno"] = -1;
         conn->send(res.dump());
     }
+}
+
+void to_json(json &j, const GroupUser &groupuser)
+{
+    j = json({{"userid", groupuser.get_id()}, {"username", groupuser.get_name()}, {"state", groupuser.get_state()}, {"role", groupuser.getGrouprole()}});
+}
+void to_json(json &j, const Group &group)
+{
+    j = json({{"groupname", group.GetName()}, {"groupdesc", group.GetDescription()}, {"id", group.GetId()}, {"users", group.GetUsers()}});
 }
 
 // 处理登录业务
@@ -121,6 +148,7 @@ void ChatService::loginLogic(const muduo::net::TcpConnectionPtr &conn,
             res["errno"] = 0;
             res["offlineMsg"] = offlineMsgModel_.query(id);
             res["friends"] = friendModel_.query(id);
+            res["groups"] = groupModel_.queryGroups(id);
             res["info"] = "登录成功";
             offlineMsgModel_.remove(id);
             conn->send(res.dump());
@@ -172,6 +200,81 @@ void ChatService::addFriend(const muduo::net::TcpConnectionPtr &conn,
         res["errno"] = 0;
         res["info"] = "添加好友成功";
         conn->send(res.dump());
+    }
+}
+
+// 处理创建群组
+void ChatService::createGroup(const muduo::net::TcpConnectionPtr &conn,
+                              json &msg,
+                              muduo::Timestamp)
+{
+    int userid = msg["id"].get<int>();
+    std::string groupname = msg["groupName"].get<std::string>();
+    std::string groupdesc = msg["groupDesc"].get<std::string>();
+    Group group;
+    group.SetId(userid);
+    group.SetName(groupname);
+    group.SetDescription(groupdesc);
+    if (groupModel_.createGroup(group))
+    {
+        if (groupModel_.addGroup(userid, group.GetId(), "creator"))
+        {
+            json res;
+            res["msgid"] = static_cast<int>(EnMsgType::CREATEGROUP_MSG);
+            res["errno"] = 0;
+            res["info"] = "创建群组成功";
+            res["groupid"] = group.GetId();
+            conn->send(res.dump());
+        }
+    }
+}
+
+// 处理加入群组
+void ChatService::joinGroup(const muduo::net::TcpConnectionPtr &conn,
+                            json &msg,
+                            muduo::Timestamp)
+{
+    int userid = msg["id"].get<int>();
+    int groupid = msg["groupId"].get<int>();
+    if (groupModel_.addGroup(userid, groupid, "normal"))
+    {
+        json res;
+        res["msgid"] = static_cast<int>(EnMsgType::JOINGROUP_MSG);
+        res["errno"] = 0;
+        res["info"] = "加入群组成功";
+        conn->send(res.dump());
+    }
+}
+
+// 处理群组聊天
+void ChatService::chatGroup(const muduo::net::TcpConnectionPtr &conn,
+                            json &msg,
+                            muduo::Timestamp)
+{
+    int userid = msg["id"].get<int>();
+    int groupid = msg["groupId"].get<int>();
+    std::string content = msg["msg"].get<std::string>();
+    json res;
+    res["msgid"] = static_cast<int>(EnMsgType::CHATGOURP_MSG);
+    res["content"] = content;
+    res["fromId"] = userid;
+    res["groupid"] = groupid;
+    res["errno"] = 0;
+    res["info"] = "群发消息";
+    std::vector<int> receiverIds = groupModel_.queryGroupUsers(userid, groupid);
+    std::cout << "receiverIds" << receiverIds[0] << userid << std::endl;
+    for (auto receiverid : receiverIds)
+    {
+        std::lock_guard<std::mutex> lock(connMapmtx_);
+        auto it = connMap_.find(receiverid);
+        if (it != connMap_.end())
+        {
+            it->second->send(res.dump());
+        }
+        else
+        {
+            offlineMsgModel_.insert(receiverid, content);
+        }
     }
 }
 

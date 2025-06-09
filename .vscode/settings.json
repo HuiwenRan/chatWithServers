@@ -61,6 +61,15 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "valarray": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "charconv": "cpp",
+        "chrono": "cpp",
+        "codecvt": "cpp",
+        "list": "cpp",
+        "format": "cpp",
+        "iomanip": "cpp",
+        "span": "cpp",
+        "strstream": "cpp",
+        "fstream": "cpp"
     }
 }

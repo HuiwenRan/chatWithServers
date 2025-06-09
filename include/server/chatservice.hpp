@@ -11,6 +11,7 @@
 #include "usermodel.hpp"
 #include "friendmodel.hpp"
 #include "offlinemsgmodel.hpp"
+#include "groupmodel.hpp"
 
 using json = nlohmann::json;
 
@@ -50,6 +51,15 @@ private:
     void addFriend(const muduo::net::TcpConnectionPtr &conn,
                    json &msg,
                    muduo::Timestamp);
+    void createGroup(const muduo::net::TcpConnectionPtr &conn,
+                     json &msg,
+                     muduo::Timestamp);
+    void joinGroup(const muduo::net::TcpConnectionPtr &conn,
+                   json &msg,
+                   muduo::Timestamp);
+    void chatGroup(const muduo::net::TcpConnectionPtr &conn,
+                   json &msg,
+                   muduo::Timestamp);
     std::unordered_map<EnMsgType, logicFunc> handlerMap_;
 
 private:
@@ -58,6 +68,7 @@ private:
     UserModel userModel_;
     OfflineMsgModel offlineMsgModel_;
     FriendModel friendModel_;
+    GroupModel groupModel_;
 };
 
 #endif

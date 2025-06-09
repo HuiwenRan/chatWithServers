@@ -317,9 +317,9 @@ src/server/CMakeFiles/server.dir/chatservice.cpp.o: \
  /usr/include/c++/13/bits/basic_ios.tcc /usr/include/c++/13/ostream \
  /usr/include/c++/13/bits/ostream.tcc \
  /usr/include/c++/13/bits/istream.tcc /root/chat/include/public.hpp \
- /root/chat/include/server/usermodel.hpp \
- /root/chat/include/server/user.hpp /root/chat/include/server/db/db.hpp \
- /usr/include/mysql/mysql.h \
+ /root/chat/include/server/model/usermodel.hpp \
+ /root/chat/include/server/model/user.hpp \
+ /root/chat/include/server/db/db.hpp /usr/include/mysql/mysql.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h \
  /usr/include/mysql/field_types.h /usr/include/mysql/my_list.h \
  /usr/include/mysql/mysql_com.h /usr/include/mysql/my_command.h \
@@ -329,5 +329,8 @@ src/server/CMakeFiles/server.dir/chatservice.cpp.o: \
  /usr/include/mysql/plugin_auth_common.h \
  /usr/include/mysql/mysql_version.h /usr/include/mysql/mysql_time.h \
  /usr/include/mysql/errmsg.h /usr/include/c++/13/iostream \
- /root/chat/include/server/friendmodel.hpp \
- /root/chat/include/server/offlinemsgmodel.hpp
+ /root/chat/include/server/model/friendmodel.hpp \
+ /root/chat/include/server/model/offlinemsgmodel.hpp \
+ /root/chat/include/server/model/groupmodel.hpp \
+ /root/chat/include/server/model/group.hpp \
+ /root/chat/include/server/model/groupuser.hpp

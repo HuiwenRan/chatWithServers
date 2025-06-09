@@ -322,9 +322,9 @@ src/server/CMakeFiles/server.dir/main.cpp.o: \
  /usr/include/c++/13/bits/parse_numbers.h \
  /usr/include/c++/13/bits/std_mutex.h \
  /usr/include/c++/13/bits/unique_lock.h \
- /root/chat/include/server/usermodel.hpp \
- /root/chat/include/server/user.hpp /root/chat/include/server/db/db.hpp \
- /usr/include/mysql/mysql.h \
+ /root/chat/include/server/model/usermodel.hpp \
+ /root/chat/include/server/model/user.hpp \
+ /root/chat/include/server/db/db.hpp /usr/include/mysql/mysql.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h \
  /usr/include/mysql/field_types.h /usr/include/mysql/my_list.h \
  /usr/include/mysql/mysql_com.h /usr/include/mysql/my_command.h \
@@ -333,8 +333,12 @@ src/server/CMakeFiles/server.dir/main.cpp.o: \
  /usr/include/mysql/client_plugin.h /usr/include/c++/13/stdlib.h \
  /usr/include/mysql/plugin_auth_common.h \
  /usr/include/mysql/mysql_version.h /usr/include/mysql/mysql_time.h \
- /usr/include/mysql/errmsg.h /root/chat/include/server/friendmodel.hpp \
- /root/chat/include/server/offlinemsgmodel.hpp /usr/include/signal.h \
+ /usr/include/mysql/errmsg.h \
+ /root/chat/include/server/model/friendmodel.hpp \
+ /root/chat/include/server/model/offlinemsgmodel.hpp \
+ /root/chat/include/server/model/groupmodel.hpp \
+ /root/chat/include/server/model/group.hpp \
+ /root/chat/include/server/model/groupuser.hpp /usr/include/signal.h \
  /usr/include/x86_64-linux-gnu/bits/signum-generic.h \
  /usr/include/x86_64-linux-gnu/bits/signum-arch.h \
  /usr/include/x86_64-linux-gnu/bits/types/sig_atomic_t.h \
