@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/root/chat/src/server/chatservice.cpp" "src/server/CMakeFiles/server.dir/chatservice.cpp.o" "gcc" "src/server/CMakeFiles/server.dir/chatservice.cpp.o.d"
   "/root/chat/src/server/db/db.cpp" "src/server/CMakeFiles/server.dir/db/db.cpp.o" "gcc" "src/server/CMakeFiles/server.dir/db/db.cpp.o.d"
+  "/root/chat/src/server/friendmodel.cpp" "src/server/CMakeFiles/server.dir/friendmodel.cpp.o" "gcc" "src/server/CMakeFiles/server.dir/friendmodel.cpp.o.d"
   "/root/chat/src/server/main.cpp" "src/server/CMakeFiles/server.dir/main.cpp.o" "gcc" "src/server/CMakeFiles/server.dir/main.cpp.o.d"
   "/root/chat/src/server/offlinemsgmodel.cpp" "src/server/CMakeFiles/server.dir/offlinemsgmodel.cpp.o" "gcc" "src/server/CMakeFiles/server.dir/offlinemsgmodel.cpp.o.d"
   "/root/chat/src/server/usermodel.cpp" "src/server/CMakeFiles/server.dir/usermodel.cpp.o" "gcc" "src/server/CMakeFiles/server.dir/usermodel.cpp.o.d"

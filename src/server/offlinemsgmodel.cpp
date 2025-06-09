@@ -2,7 +2,7 @@
 
 #include "db.hpp"
 
-void OfflineMsgModel::insert(int id, std::string msg)
+bool OfflineMsgModel::insert(int id, std::string msg)
 {
     char sql[1024] = {0};
     sprintf(sql, "insert into offlinemessage values(%d,'%s')", id, msg.c_str());
@@ -10,8 +10,12 @@ void OfflineMsgModel::insert(int id, std::string msg)
     MySQL mysql;
     if (mysql.connect())
     {
-        mysql.update(sql);
+        if (mysql.update(sql))
+        {
+            return true;
+        }
     }
+    return false;
 }
 void OfflineMsgModel::remove(int id)
 {

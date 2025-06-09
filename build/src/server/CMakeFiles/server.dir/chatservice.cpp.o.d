@@ -329,4 +329,5 @@ src/server/CMakeFiles/server.dir/chatservice.cpp.o: \
  /usr/include/mysql/plugin_auth_common.h \
  /usr/include/mysql/mysql_version.h /usr/include/mysql/mysql_time.h \
  /usr/include/mysql/errmsg.h /usr/include/c++/13/iostream \
+ /root/chat/include/server/friendmodel.hpp \
  /root/chat/include/server/offlinemsgmodel.hpp

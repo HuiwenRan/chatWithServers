@@ -9,6 +9,7 @@
 #include "json.hpp"
 #include "public.hpp"
 #include "usermodel.hpp"
+#include "friendmodel.hpp"
 #include "offlinemsgmodel.hpp"
 
 using json = nlohmann::json;
@@ -46,6 +47,9 @@ private:
     void sendMessage(const muduo::net::TcpConnectionPtr &conn,
                      json &msg,
                      muduo::Timestamp);
+    void addFriend(const muduo::net::TcpConnectionPtr &conn,
+                   json &msg,
+                   muduo::Timestamp);
     std::unordered_map<EnMsgType, logicFunc> handlerMap_;
 
 private:
@@ -53,6 +57,7 @@ private:
     std::mutex connMapmtx_;
     UserModel userModel_;
     OfflineMsgModel offlineMsgModel_;
+    FriendModel friendModel_;
 };
 
 #endif

@@ -49,6 +49,12 @@ ChatService::ChatService()
                                   std::placeholders::_1,
                                   std::placeholders::_2,
                                   std::placeholders::_3));
+    handlerMap_.emplace(EnMsgType::ADDFRIEND_MSG,
+                        std::bind(&ChatService::addFriend,
+                                  this,
+                                  std::placeholders::_1,
+                                  std::placeholders::_2,
+                                  std::placeholders::_3));
 }
 
 // 处理注册操作
@@ -114,6 +120,7 @@ void ChatService::loginLogic(const muduo::net::TcpConnectionPtr &conn,
             res["msgid"] = static_cast<int>(EnMsgType::LOGIN_MSG);
             res["errno"] = 0;
             res["offlineMsg"] = offlineMsgModel_.query(id);
+            res["friends"] = friendModel_.query(id);
             res["info"] = "登录成功";
             offlineMsgModel_.remove(id);
             conn->send(res.dump());
@@ -150,6 +157,22 @@ void ChatService::sendMessage(const muduo::net::TcpConnectionPtr &conn,
     }
     // 说明用户没在线，存入offlineMsg中
     offlineMsgModel_.insert(toid, content);
+}
+
+void ChatService::addFriend(const muduo::net::TcpConnectionPtr &conn,
+                            json &msg,
+                            muduo::Timestamp)
+{
+    int userid = msg["id"].get<int>();
+    int friendid = msg["friendId"].get<int>();
+    if (friendModel_.insert(userid, friendid) && friendModel_.insert(friendid, userid))
+    {
+        json res;
+        res["msgid"] = static_cast<int>(EnMsgType::ADDFRIEND_MSG);
+        res["errno"] = 0;
+        res["info"] = "添加好友成功";
+        conn->send(res.dump());
+    }
 }
 
 //  处理用户异常退出

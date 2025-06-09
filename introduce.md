@@ -6,3 +6,4 @@
     {"msgid":2,"id":22,"password":"zhangsan"}
     {"msgid":2,"id":23,"password":"lisi"}
 3. 发送消息{"msgid":3,"id":22,"from":"zhangsan","to":23,"msg":"hello"}
+4. 添加朋友{"msgid":4,"id":22,"friendId":23}

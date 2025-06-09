@@ -333,7 +333,7 @@ src/server/CMakeFiles/server.dir/main.cpp.o: \
  /usr/include/mysql/client_plugin.h /usr/include/c++/13/stdlib.h \
  /usr/include/mysql/plugin_auth_common.h \
  /usr/include/mysql/mysql_version.h /usr/include/mysql/mysql_time.h \
- /usr/include/mysql/errmsg.h \
+ /usr/include/mysql/errmsg.h /root/chat/include/server/friendmodel.hpp \
  /root/chat/include/server/offlinemsgmodel.hpp /usr/include/signal.h \
  /usr/include/x86_64-linux-gnu/bits/signum-generic.h \
  /usr/include/x86_64-linux-gnu/bits/signum-arch.h \
