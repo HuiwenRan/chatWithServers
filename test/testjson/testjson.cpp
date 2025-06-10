@@ -15,8 +15,8 @@ json内容可以为：
     整数
     bool
     null(cpp中使用nullptr)
-    嵌套对象(可以直接赋值给map对象)
-    数组（可以直接赋值给vector）
+    嵌套对象(可以直接赋值给map对象,但是键值类型要对应起来)
+    数组（可以直接赋值给vector<class>, 但是元素需要是对应的基本类型，自定义类型需要添加from_json）
 */
 // 接受json字符串char*，然后反序列化为对象，进行数据处理
 // json变为string类型，string变为char*，然后发送
