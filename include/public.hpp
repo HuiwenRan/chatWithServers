@@ -10,4 +10,5 @@ enum class EnMsgType
     CREATEGROUP_MSG,
     JOINGROUP_MSG,
     CHATGOURP_MSG,
+    LOGOUT_MSG,
 };

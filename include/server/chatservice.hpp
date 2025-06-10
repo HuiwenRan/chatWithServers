@@ -45,6 +45,9 @@ private:
     void loginLogic(const muduo::net::TcpConnectionPtr &conn,
                     json &msg,
                     muduo::Timestamp);
+    void logoutLogic(const muduo::net::TcpConnectionPtr &conn,
+                     json &msg,
+                     muduo::Timestamp);
     void sendMessage(const muduo::net::TcpConnectionPtr &conn,
                      json &msg,
                      muduo::Timestamp);

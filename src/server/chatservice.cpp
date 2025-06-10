@@ -36,6 +36,12 @@ ChatService::ChatService()
                                   std::placeholders::_2,
                                   std::placeholders::_3));
 
+    handlerMap_.emplace(EnMsgType::LOGOUT_MSG,
+                        std::bind(&ChatService::logoutLogic,
+                                  this,
+                                  std::placeholders::_1,
+                                  std::placeholders::_2,
+                                  std::placeholders::_3));
     handlerMap_.emplace(EnMsgType::REG_MSG,
                         std::bind(&ChatService::registerLogic,
                                   this,
@@ -132,7 +138,7 @@ void ChatService::loginLogic(const muduo::net::TcpConnectionPtr &conn,
             json res;
             res["msgid"] = static_cast<int>(EnMsgType::LOGIN_MSG);
             res["errno"] = -1;
-            res["info"] = "用户已在线";
+            res["info"] = "this user is online";
             conn->send(res.dump());
         }
         else
@@ -145,11 +151,13 @@ void ChatService::loginLogic(const muduo::net::TcpConnectionPtr &conn,
             userModel_.updateState(user);
             json res;
             res["msgid"] = static_cast<int>(EnMsgType::LOGIN_MSG);
+            res["id"] = id;
+            res["name"] = user.get_name();
             res["errno"] = 0;
-            res["offlineMsg"] = offlineMsgModel_.query(id);
+            res["offlinemsg"] = offlineMsgModel_.query(id);
             res["friends"] = friendModel_.query(id);
             res["groups"] = groupModel_.queryGroups(id);
-            res["info"] = "登录成功";
+            res["info"] = "login success";
             offlineMsgModel_.remove(id);
             conn->send(res.dump());
         }
@@ -159,8 +167,25 @@ void ChatService::loginLogic(const muduo::net::TcpConnectionPtr &conn,
         json res;
         res["msgid"] = static_cast<int>(EnMsgType::LOGIN_MSG);
         res["errno"] = -1;
-        res["info"] = "密码错误";
+        res["info"] = "password error or user not exist";
         conn->send(res.dump());
+    }
+}
+
+void ChatService::logoutLogic(const muduo::net::TcpConnectionPtr &conn,
+                              json &msg,
+                              muduo::Timestamp)
+{
+    int id = msg["id"].get<int>();
+    User user;
+    user.set_id(id);
+    user.set_state("offline");
+    userModel_.updateState(user);
+    std::lock_guard<std::mutex> lock(connMapmtx_);
+    auto it = connMap_.find(id);
+    if (it != connMap_.end())
+    {
+        connMap_.erase(it);
     }
 }
 
@@ -169,22 +194,19 @@ void ChatService::sendMessage(const muduo::net::TcpConnectionPtr &conn,
                               json &msg,
                               muduo::Timestamp)
 {
-    int toid = msg["to"].get<int>();
-    std::string content = msg["msg"].get<std::string>();
+    int toid = msg["toid"].get<int>();
     {
         // 在使用conn时需要加锁
         std::lock_guard<std::mutex> lock(connMapmtx_);
         auto it = connMap_.find(toid);
         if (it != connMap_.end())
         {
-            json res;
-            res["msgid"] = content;
-            it->second->send(res.dump());
+            it->second->send(msg.dump());
             return;
         }
     }
     // 说明用户没在线，存入offlineMsg中
-    offlineMsgModel_.insert(toid, content);
+    offlineMsgModel_.insert(toid, msg.dump());
 }
 
 void ChatService::addFriend(const muduo::net::TcpConnectionPtr &conn,
@@ -192,13 +214,12 @@ void ChatService::addFriend(const muduo::net::TcpConnectionPtr &conn,
                             muduo::Timestamp)
 {
     int userid = msg["id"].get<int>();
-    int friendid = msg["friendId"].get<int>();
+    int friendid = msg["friendid"].get<int>();
     if (friendModel_.insert(userid, friendid) && friendModel_.insert(friendid, userid))
     {
         json res;
         res["msgid"] = static_cast<int>(EnMsgType::ADDFRIEND_MSG);
         res["errno"] = 0;
-        res["info"] = "添加好友成功";
         conn->send(res.dump());
     }
 }
@@ -209,8 +230,8 @@ void ChatService::createGroup(const muduo::net::TcpConnectionPtr &conn,
                               muduo::Timestamp)
 {
     int userid = msg["id"].get<int>();
-    std::string groupname = msg["groupName"].get<std::string>();
-    std::string groupdesc = msg["groupDesc"].get<std::string>();
+    std::string groupname = msg["groupname"].get<std::string>();
+    std::string groupdesc = msg["groupdesc"].get<std::string>();
     Group group;
     group.SetId(userid);
     group.SetName(groupname);
@@ -222,7 +243,6 @@ void ChatService::createGroup(const muduo::net::TcpConnectionPtr &conn,
             json res;
             res["msgid"] = static_cast<int>(EnMsgType::CREATEGROUP_MSG);
             res["errno"] = 0;
-            res["info"] = "创建群组成功";
             res["groupid"] = group.GetId();
             conn->send(res.dump());
         }
@@ -235,13 +255,12 @@ void ChatService::joinGroup(const muduo::net::TcpConnectionPtr &conn,
                             muduo::Timestamp)
 {
     int userid = msg["id"].get<int>();
-    int groupid = msg["groupId"].get<int>();
+    int groupid = msg["groupid"].get<int>();
     if (groupModel_.addGroup(userid, groupid, "normal"))
     {
         json res;
         res["msgid"] = static_cast<int>(EnMsgType::JOINGROUP_MSG);
         res["errno"] = 0;
-        res["info"] = "加入群组成功";
         conn->send(res.dump());
     }
 }
@@ -252,28 +271,19 @@ void ChatService::chatGroup(const muduo::net::TcpConnectionPtr &conn,
                             muduo::Timestamp)
 {
     int userid = msg["id"].get<int>();
-    int groupid = msg["groupId"].get<int>();
-    std::string content = msg["msg"].get<std::string>();
-    json res;
-    res["msgid"] = static_cast<int>(EnMsgType::CHATGOURP_MSG);
-    res["content"] = content;
-    res["fromId"] = userid;
-    res["groupid"] = groupid;
-    res["errno"] = 0;
-    res["info"] = "群发消息";
+    int groupid = msg["groupid"].get<int>();
     std::vector<int> receiverIds = groupModel_.queryGroupUsers(userid, groupid);
-    std::cout << "receiverIds" << receiverIds[0] << userid << std::endl;
     for (auto receiverid : receiverIds)
     {
         std::lock_guard<std::mutex> lock(connMapmtx_);
         auto it = connMap_.find(receiverid);
         if (it != connMap_.end())
         {
-            it->second->send(res.dump());
+            it->second->send(msg.dump());
         }
         else
         {
-            offlineMsgModel_.insert(receiverid, content);
+            offlineMsgModel_.insert(receiverid, msg.dump());
         }
     }
 }
